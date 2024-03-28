@@ -16,29 +16,32 @@ class _Piechart1State extends State<Piechart1> {
   };
   @override
   Widget build(BuildContext context) {
-    return PieChart(
-      dataMap: dataMap,
-      animationDuration: Duration(milliseconds: 800),
-      chartLegendSpacing: 32,
-      chartRadius: MediaQuery.of(context).size.width / 3.2,
-      colorList: [Color.fromARGB(255, 42, 212, 118),Color.fromARGB(211, 255, 9, 9),Colors.orange],
-      chartType: ChartType.ring,
-      legendOptions: LegendOptions(
-        showLegendsInRow: false,
-        legendPosition: LegendPosition.right,
-       
-        legendTextStyle: TextStyle(
-          fontWeight: FontWeight.bold,
+    return AspectRatio(
+      aspectRatio: 20/9,
+      child: PieChart(
+        dataMap: dataMap,
+        animationDuration: Duration(milliseconds: 800),
+        chartLegendSpacing: 32,
+        chartRadius: MediaQuery.of(context).size.width / 3.2,
+        colorList: [Color.fromARGB(255, 42, 212, 118),Color.fromARGB(211, 255, 9, 9),Colors.orange],
+        chartType: ChartType.ring,
+        legendOptions: LegendOptions(
+          showLegendsInRow: false,
+          legendPosition: LegendPosition.right,
+         
+          legendTextStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        chartValuesOptions: ChartValuesOptions(
+          chartValueBackgroundColor: Colors.white,
+          showChartValueBackground: true,
+          showChartValues: true,
+          showChartValuesOutside: true,
+          // decimalPlaces: 1,
+        ),
+       
       ),
-      chartValuesOptions: ChartValuesOptions(
-        chartValueBackgroundColor: Colors.white,
-        showChartValueBackground: true,
-        showChartValues: true,
-        showChartValuesOutside: true,
-        // decimalPlaces: 1,
-      ),
-     
     );
   }
 }

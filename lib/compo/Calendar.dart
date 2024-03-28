@@ -19,7 +19,7 @@ class _CalendarwidgetState extends State<Calendarwidget> {
       child: Container(
             height: 250,
             width: 250,
-              decoration: BoxDecoration(color: const Color.fromRGBO(216, 97, 97, 1),
+              decoration: BoxDecoration(color: Color.fromARGB(255, 255, 255, 255),
               borderRadius: BorderRadius.circular(5),
               boxShadow: [
                 BoxShadow(
