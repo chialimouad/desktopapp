@@ -1,21 +1,51 @@
+import 'dart:convert';
+
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:deskapp/barchat/Headerwidget.dart';
 import 'package:deskapp/barchat/bannerdash.dart';
 import 'package:deskapp/bargraph/mybargraph.dart';
 import 'package:deskapp/bargraph/piechart.dart';
-import 'package:deskapp/screens/logindoc.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class HomeLogin extends StatefulWidget {
-const HomeLogin({super.key,});
+  final token;
+const HomeLogin({super.key,  required this.token,});
 
 @override
 State<HomeLogin> createState() => _HomeLoginState();
 }
 
 class _HomeLoginState extends State<HomeLogin> {
+     List? items;
+late String userid;
+@override
+void initState() {
+// TODO: implement initState
+super.initState();
+Map<String,dynamic> jwtDecodedToken =JwtDecoder.decode(widget.token);
+
+userid=jwtDecodedToken['id'];
+getuser(userid);
+}
+
+   void getuser(userid)async{
+   
+        var regbody={
+          "userId":userid,
+        };
+        var response=await http.post(Uri.parse("https://s4db.onrender.com/12/getuser"),headers: {"Content-Type":"application/json"},
+        
+        body: jsonEncode(regbody));
+        var newtoken=jsonDecode(response.body);
+        items =newtoken['success'];
+     
+       
+      
+    }
+
 List<double> weekly=[
 30.9,
 50.8,
@@ -29,103 +59,142 @@ List<double> weekly=[
 Widget build(BuildContext context) {
 return Scaffold(
 body: 
- Container(
-width: MediaQuery.of(context).size.width,
- height: MediaQuery.of(context).size.height,
-decoration: BoxDecoration(color: const Color.fromARGB(255, 255, 255, 255),borderRadius: BorderRadius.only(topLeft: Radius.circular(30),bottomLeft: Radius.circular(30))),
-child: Column(
-children: [
-
-WindowTitleBarBox(
-child: Column(
-children: [
-Expanded(
-child: MoveWindow())],),
-),
-//header
-Container(
-height: 40,
-width: double.maxFinite,
-child: Headerwidget()),
-
-   Expanded(
-  child: Row(
-  mainAxisAlignment: MainAxisAlignment.center,
-  children: [
-  Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-  const Padding(
-  padding: EdgeInsets.only(top: 25,bottom: 10),
-  child: Column(
-  children: [  
-  Row(children: [  
-  SizedBox(width: 30,),                     
-  Text("Active",style: TextStyle(decoration: TextDecoration.none,color: Color.fromARGB(255, 0, 0, 0),fontSize: 14),),
-  SizedBox(width: 15,),
-  CircleAvatar(radius: 5,backgroundColor: Colors.green,),
-  ],)
-  ],),
-  ),
-  Container(
-  width: 780,
-  child:   Container(
-  
-  child:  Column(
-  children: [
-  Bnnerdash() ,
-  Padding(
-  padding: const EdgeInsets.all(20.0),
-  child: Center(
-  child: Row(
-  children: [
-  Container(
-  width: 300,
-  height: 150,
-  decoration: BoxDecoration(color: Colors.white,
-  boxShadow: const[
-  BoxShadow(
-  offset: const Offset(0,0),
-  spreadRadius: 0.2,
-  blurRadius: 0.2,
-  color: Colors.black
-  )
-  ]
-  ,
-  borderRadius: BorderRadius.circular(30)),
-  child:
-   BarChartSample3()    , 
-  
-  ),
-  SizedBox(width: 100,),
-  Container(
-  
-  width: 300,
-  height: 150,
-  decoration: BoxDecoration(color: Colors.white,
-  
-  
-  borderRadius: BorderRadius.circular(30)),
-  child: Piechart1()
-  ),
-  
-  ],
-  ),
-  ),
-  ),],
-  ),)
-  ),
-  ],
-  ),
-  ],
-  )
-  ),
-
-
-],
-),
-
-),
+ Expanded(
+   child: Center(
+     child: ListView(
+       children: [
+        Container(
+       height: double.maxFinite,
+       width: double.maxFinite,
+       decoration: BoxDecoration(color: const Color.fromARGB(255, 255, 255, 255),borderRadius: BorderRadius.only(topLeft: Radius.circular(30),bottomLeft: Radius.circular(30))),
+       child: Column(
+       children: [
+       
+       WindowTitleBarBox(
+       child: Column(
+       children: [
+       Expanded(
+       child: MoveWindow())],),
+       ),
+       //header
+       Container(
+       height: 40,
+       width: double.maxFinite,
+       child: Headerwidget()),
+       
+         Expanded(
+        child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+        Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        const Padding(
+        padding: EdgeInsets.only(top: 25,bottom: 10),
+        child: Column(
+        children: [  
+        Row(children: [  
+        SizedBox(width: 30,),                     
+        Text("Active",style: TextStyle(decoration: TextDecoration.none,color: Color.fromARGB(255, 0, 0, 0),fontSize: 14),),
+        SizedBox(width: 15,),
+        CircleAvatar(radius: 5,backgroundColor: Colors.green,),
+        ],)
+        ],),
+        ),
+        Container(
+        width: 780,
+        child:   Container(
+        
+        child:  Column(
+        children: [
+        Bannerdash(token: widget.token,) ,
+        Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Center(
+        child: Row(
+        children: [
+        Container(
+        width: 300,
+        height: 150,
+        decoration: BoxDecoration(color: Colors.white,
+        boxShadow: const[
+        BoxShadow(
+        offset: const Offset(0,0),
+        spreadRadius: 0.2,
+        blurRadius: 0.2,
+        color: Colors.black
+        )
+        ]
+        ,
+        borderRadius: BorderRadius.circular(30)),
+        child:BarChartSample3()    , 
+        
+        ),
+        SizedBox(width: 100,),
+        Container(
+        
+        width: 300,
+        height: 150,
+        decoration: BoxDecoration(color: Colors.white,
+        
+        
+        borderRadius: BorderRadius.circular(30)),
+        child: Piechart1()
+        ),
+        
+        ],
+        ),
+        ),
+        ),
+         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+           children: [
+             Container(
+              width: 400,
+              height: 500,
+              decoration: BoxDecoration( color: Color.fromARGB(255, 255, 255, 255),
+              border: Border.all(width: 1)
+     ),
+                child: items==null?
+                Container(width: 300,height: double.maxFinite,
+                child: Image.asset("images/nouser.jpg"),):ListView.builder(itemCount: items!.length,itemBuilder: (context,int index){
+                  return Container(
+                         color: Color.fromARGB(255, 255, 255, 255),
+                    child: Card(
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            Text('${items![index]['email']}'),
+                            Text('${items![index]['fullname']}'),
+                          ],
+                        ),
+                        leading: Icon(Icons.abc_rounded),
+                        ),
+                        
+                        ),
+                  );
+                            
+                },),),
+           ],
+         ),
+        ],
+        ),
+        )
+        ),
+        ],
+        ),
+        ],
+        )
+        ),
+       
+       
+       ],
+       ),
+       
+       ),],
+     ),
+   ),
+ ),
 
 );
 }

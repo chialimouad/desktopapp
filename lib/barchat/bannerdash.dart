@@ -1,10 +1,28 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
-class Bnnerdash extends StatelessWidget {
-  const Bnnerdash({super.key});
+class Bannerdash extends StatefulWidget {
+  final token;
+  const Bannerdash({super.key, this.token});
 
+  @override
+  State<Bannerdash> createState() => _BannerdashState();
+}
+
+class _BannerdashState extends State<Bannerdash> {
+    late String name;
+
+  @override
+void initState() {
+// TODO: implement initState
+super.initState();
+Map<String,dynamic> jwtDecodedToken =JwtDecoder.decode(widget.token);
+name=jwtDecodedToken['fullname'];
+
+
+}
   @override
   Widget build(BuildContext context) {
     return AspectRatio(
@@ -35,7 +53,7 @@ class Bnnerdash extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                   
                     children: [
-                        Text("Alex Jimmy",style: TextStyle(color: Color.fromRGBO(216, 97, 97, 1),fontSize: 15,fontWeight: FontWeight.bold),),
+                        Text(name,style: TextStyle(color: Color.fromRGBO(216, 97, 97, 1),fontSize: 15,fontWeight: FontWeight.bold),),
                        const Text.rich(
                        TextSpan(
                         style: TextStyle(decoration: TextDecoration.none,color: Colors.black),

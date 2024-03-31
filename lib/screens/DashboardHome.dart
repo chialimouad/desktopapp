@@ -8,6 +8,7 @@ import 'package:deskapp/screens/homelogin.dart';
 import 'package:deskapp/screens/infos.dart';
 import 'package:deskapp/screens/logindoc.dart';
 import 'package:deskapp/screens/settings.dart';
+import 'package:deskapp/screens/stat.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,8 +21,8 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Dashboar extends StatefulWidget {
-  final token;
-   Dashboar({required this.token,super.key, });
+  final token,usrtoken;
+   Dashboar({required this.token,super.key, this.usrtoken, });
 
   @override
   State<Dashboar> createState() => _DashboarState();
@@ -75,12 +76,12 @@ print(err);
   Widget build(BuildContext context) {
     
       final List<Widget> screens =[
-     HomeLogin(),
+     HomeLogin(token: widget.token,),
      Allpatient(token: widget.token,),
      Addusers(token: widget.token,),
      History(),
      Infos(token: widget.token,),
-    Settings(token: widget.token,)
+    Settings(token: widget.token,),
     ];
     return Scaffold(
 body: 

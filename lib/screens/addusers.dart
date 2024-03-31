@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'dart:ui';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:deskapp/screens/allpatients.dart';
+import 'package:deskapp/screens/stat.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:deskapp/barchat/Headerwidget.dart';
@@ -30,12 +33,13 @@ enum GrpLabel {
     }
 
     class _AddusersState extends State<Addusers> {
+      
       GrpLabel? grp;
     bool ? isselected = false;
     bool? isemail =false;
     bool? isalphapulse=false;
     bool? isalpha=false;
-    PhoneNumber phoneNumber = PhoneNumber(isoCode: 'DZ '); 
+    PhoneNumber phoneNumber = PhoneNumber(isoCode: 'DZA '); 
     TextEditingController email = TextEditingController();
     TextEditingController Fullname = TextEditingController();
     TextEditingController Willaya = TextEditingController();
@@ -49,23 +53,56 @@ enum GrpLabel {
     final formKey = GlobalKey<FormState>();
     final formKey1 = GlobalKey<FormState>();
     late SharedPreferences prefs;
-    late dynamic userid;
+    late String userid;
 
     @override
     void initState(){
       super.initState();
-      Map<String,dynamic> jwtDecodedToken =JwtDecoder.decode(widget.token);
-    userid=jwtDecodedToken['userId'];
+       Map<String,dynamic> jwtDecodedToken =JwtDecoder.decode(widget.token);
+       userid=jwtDecodedToken['id'];
       initshared();
+      insertdata();
     }
     initshared()async{
       prefs =await SharedPreferences.getInstance();
     }
- 
-     insertdata()async {
-        
-      var res=await http.post(Uri.parse("https://s4db.onrender.com/12/register"),body: {
-         "email":email.text,
+
+  //
+// insertdata()async {
+// // ignore: avoid_print
+// if(email.text.isNotEmpty && Password.text.isNotEmpty){
+// var regbody={
+// "email":email.text,
+// "password":Password.text,
+
+
+// };
+// var res=  await http.post(Uri.parse("https://s4db.onrender.com/12/loginuser"),headers: {"Content-Type":"application/json"}
+// ,body:jsonEncode(regbody));
+// var resjson=jsonDecode(res.body);
+// if(resjson['status']){
+//   setState(() {
+    
+//   });
+// var mytoken=resjson['token'];
+// prefs.setString('token', mytoken);
+// Navigator.push(context, MaterialPageRoute(builder: ((context) =>Allpatient(token: mytoken,))));
+// //Allpatient(token: mytoken);
+// print("hada jdid${mytoken}");
+// }
+
+
+
+
+
+// }
+
+
+// }
+  insertdata()async {
+if(email.text.isNotEmpty && Password.text.isNotEmpty&& Fullname.text.isNotEmpty && Willaya.text.isNotEmpty){
+var regbody={
+  "email":email.text,
          "fullname":Fullname.text,
          "phonenumber":phoneNumber.phoneNumber,
          "willaya":Willaya.text,
@@ -74,10 +111,17 @@ enum GrpLabel {
          "maladie":isselected.toString(),
          //"Grp":grp!.label.toString(),
          "idpulse":IdOfpulse.text,
-         
-      });
+        "userId":userid
 
-      if(res.statusCode==200){
+
+};
+var res=  await http.post(Uri.parse("https://s4db.onrender.com/12/register"),headers: {"Content-Type":"application/json"}
+,body:jsonEncode(regbody));
+var resjson=jsonDecode(res.body);
+
+ 
+
+      if(resjson['status']){
 
               showDialog<String>(
         context: context,
@@ -118,8 +162,8 @@ enum GrpLabel {
         ),
       );
       }
-
-     }
+}
+}
 
 
     @override
@@ -212,24 +256,7 @@ enum GrpLabel {
             )),),
             SizedBox(height: 20,),
                         
-            TextFormField(
-            validator: (value){
-            if(value==null || value.isEmpty){
-            return"please insert valid email";
-            }
-            } ,
-            cursorColor: isemail!? Colors.green: Colors.red,
-            controller: emailconfirm,
-            autofocus: true,     
-            onChanged: (val){
-            setState(() {
-            isemail=isEmail(val);
-            });
-            },                               
-            decoration: InputDecoration(
-            labelText: "Emailconfirme:",
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)
-            )),),
+            
             TextFormField(
             validator: (value){
             if(value==null || value.isEmpty){
@@ -433,7 +460,6 @@ enum GrpLabel {
             backgroundColor: Colors.redAccent,),
                 
           onPressed: (){
-             insertdata();
         
            if (formKey1.currentState?.validate() ?? false) {
           
@@ -451,6 +477,8 @@ enum GrpLabel {
           print('Phone number: ${phoneNumber.phoneNumber}'); 
           print('ISO code: ${phoneNumber.isoCode}'); 
             } 
+                         insertdata();
+
           }, child: const Text("Add Patient Now",style: TextStyle(color: Colors.white,),)),
           SizedBox(height: 200,)
           ],

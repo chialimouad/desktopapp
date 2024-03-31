@@ -11,8 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-class LoginDoc extends StatelessWidget {
-const LoginDoc({super.key});
+class Loginuser extends StatelessWidget {
+const Loginuser({super.key});
 
 @override
 Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ var regbody={
 
 
 };
-var res=  await http.post(Uri.parse("https://s4db.onrender.com/12/logindoc"),headers: {"Content-Type":"application/json",}
+var res=  await http.post(Uri.parse("https://s4db.onrender.com/12/loginuser"),headers: {"Content-Type":"application/json","Authorization": "Bearer your_admin_token",}
 ,body:jsonEncode(regbody));
 var resjson=jsonDecode(res.body);
 if(resjson['status']){
@@ -89,7 +89,7 @@ if(resjson['status']){
     
   });
 var mytoken=resjson['token'];
-prefs.setString('token', mytoken);
+prefs.setString('user', mytoken);
 isactive==false? CircularProgressIndicator(): Navigator.push(context, MaterialPageRoute(builder: ((context) =>Dashboar(token: mytoken,))));
 Settings(token: mytoken,);
 //Allpatient(token: mytoken);
