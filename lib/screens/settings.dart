@@ -1,4 +1,8 @@
+import 'package:deskapp/barchat/Headerwidget.dart';
+import 'package:deskapp/barchat/Headerwidget3.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class Settings extends StatefulWidget {
@@ -35,122 +39,223 @@ phone=jwtDecodedToken['phonenumber'];
 Widget build(BuildContext context) {
 return 
 Scaffold(
-body: 
+body: ListView(
+  children: [Column(
+    
+    children: [
+      Container(
+        width: double.maxFinite,
+        height: 100,
+        child: Headerwidget3()),
+              Text("Your Personal Information Dr.${name}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),),
 
- 
-AspectRatio(
-aspectRatio: 16/9,
-child: Container(
-child: Container(
-padding: EdgeInsets.all(10),
-decoration: BoxDecoration(
-boxShadow: [
-BoxShadow(
-blurRadius: 1
-)
-],
-color: Color.fromARGB(255, 255, 255, 255),borderRadius: BorderRadius.circular(20)),
-child: Padding(
-padding: const EdgeInsets.all(12.0),
-child: Column(
-mainAxisAlignment: MainAxisAlignment.spaceAround,
-crossAxisAlignment: CrossAxisAlignment.start,
-children: [
-Text("Your Personal Information Dr.${name}"),
-Row(
-mainAxisAlignment: MainAxisAlignment.spaceAround,
-children: [
-Container(
-width: 300,height: 40,
-child: Center(
-child: Row(
-  children: [
-    Text("  Email:",style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.normal),),
-    SizedBox(width: 10,),
-    Text(email,style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-  ],
-)),
-),
-Container(
-width: 300,height: 40,
+      
+         Container(
+        padding: EdgeInsets.all(10),
+        decoration: BoxDecoration(
+        
+        color: Color.fromARGB(255, 255, 255, 255),borderRadius: BorderRadius.circular(20)),
+        child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+        Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [ 
+          SizedBox(height: 30,),
+                  Text("email address :  ",style: TextStyle(color: Color.fromRGBO(0, 52, 102, 1),fontSize: 16,fontWeight: FontWeight.normal),),
+     SizedBox(height: 10,),
+        Container(
+        decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.733),borderRadius: BorderRadius.circular(5),),
+  
+        width: 400,height: 60,
+        
+        child: Row(
+          children: [
+            
+            Container(
+              height: double.maxFinite,
+              decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 1),borderRadius: BorderRadius.circular(1)),
+              child: 
+                  Icon(Icons.email,color: Color.fromRGBO(0, 52, 102, 1),),
+                
+            
+              ),
+            SizedBox(width: 10,),
+            Text(email,style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
+            
+          ],
+        ),
+        ),
+       
+      
+        ],), SizedBox(height: 10,),
+  
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+                            Text("Willaya  :  ",style: TextStyle(color: Color.fromRGBO(0, 52, 102, 1),fontSize: 16,fontWeight: FontWeight.normal),),
+                            SizedBox(height: 10,),
 
-child: Center(child: Row(
-  children: [
-    Text("Fullname:",style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.normal),),
-    SizedBox(width: 10,),
-    Text(name,style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-  ],
-)),
+          Container(
+           decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.733),borderRadius: BorderRadius.circular(5),),
+  
+        width: 400,height: 40,
+        
+        child: Row(
+          children: [
+                Container(height: double.maxFinite,
+                                                          decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 1),borderRadius: BorderRadius.circular(1)),
+  
+                  child: Icon(Icons.streetview,color: Color.fromRGBO(0, 52, 102, 1),)),
+        
+            Text(   willaya,style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
+  
+          ],
+        ),
+        ),
+        
+   
+     
+        
+        
+        ],), SizedBox(height: 30,),
+  
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               Text("Phone Number  :  ",style: TextStyle(color: Color.fromRGBO(0, 52, 102, 1),fontSize: 16,fontWeight: FontWeight.normal),),
+              Container(
+                      decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.733),borderRadius: BorderRadius.circular(5),),
+                
+                      width: 400,height: 40,
+                      
+                      child: Row(
+              children: [
+                    Container( height: double.maxFinite,
+                
+                      
+                                              decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 1),borderRadius: BorderRadius.circular(1)),
+                
+                      child: Icon(Icons.phone,color: Color.fromRGBO(0, 52, 102, 1),)),
+                      
+                Text(" +${phone}",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
+              ],
+                      ),
+                      ),
+            ],
+          ),      SizedBox(height: 30,),
+  
+           Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               Text("Age:  ",style: TextStyle(color: Color.fromRGBO(0, 52, 102, 1),fontSize: 16,fontWeight: FontWeight.normal),),
+              Container(
+                      decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.733),borderRadius: BorderRadius.circular(5),),
+                
+                      width: 400,height: 40,
+                      
+                      child: Row(
+              children: [
+                    Container( height: double.maxFinite,
+                
+                      
+                                              decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 1),borderRadius: BorderRadius.circular(1)),
+                
+                      child: Icon(Icons.phone,color: Color.fromRGBO(0, 52, 102, 1),)),
+                      
+                Text(" +${age}",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
+              ],
+                      ),
+                      ),
+            ],
+          ),      SizedBox(height: 30,),
+              
+  
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               Text("Fullname  :  ",style: TextStyle(color: Color.fromRGBO(0, 52, 102, 1),fontSize: 16,fontWeight: FontWeight.normal),),
+              Container(
+                      decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.733),borderRadius: BorderRadius.circular(5),),
+                
+                      width: 400,height: 40,
+                      
+                      child: Row(
+              children: [
+                    Container( height: double.maxFinite,
+                
+                      
+                                              decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 1),borderRadius: BorderRadius.circular(1)),
+                
+                      child: Icon(Icons.phone,color: Color.fromRGBO(0, 52, 102, 1),)),
+                      
+                Text(" ${name}",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
+              ],
+                      ),
+                      ),
+            ],
+          ),      SizedBox(height: 30,),
+     
+       Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               Text("Password  :  ",style: TextStyle(color: Color.fromRGBO(0, 52, 102, 1),fontSize: 16,fontWeight: FontWeight.normal),),
+              Container(
+                      decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.733),borderRadius: BorderRadius.circular(5),),
+                
+                      width: 400,height: 40,
+                      
+                      child: Row(
+              children: [
+                    Container( height: double.maxFinite,
+                
+                      
+                                              decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 1),borderRadius: BorderRadius.circular(1)),
+                
+                      child: Icon(Icons.phone,color: Color.fromRGBO(0, 52, 102, 1),)),
+                      
+                Text(" ************",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
+              ],
+                      ),
+                      ),
+            ],
+          ),      SizedBox(height: 30,),
+              
+  
+        Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+               Text("Specialite :  ",style: TextStyle(color: Color.fromRGBO(0, 52, 102, 1),fontSize: 16,fontWeight: FontWeight.normal),),
+              Container(
+                      decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.733),borderRadius: BorderRadius.circular(5),),
+                
+                      width: 400,height: 40,
+                      
+                      child: Row(
+              children: [
+                    Container( height: double.maxFinite,
+                
+                      
+                                              decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 1),borderRadius: BorderRadius.circular(1)),
+                
+                      child: Icon(Icons.phone,color: Color.fromRGBO(0, 52, 102, 1),)),
+                      
+                Text(" +${Spec}",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
+              ],
+                      ),
+                      ),
+            ],
+          ),      SizedBox(height: 30,),
+        ],),
+        ),
+        ),
+      
+    ],
+  ),]
 ),
-Container(
 
-width: 300,height: 40,
-
-child: Center(child: Row(
-  children: [
-    Text("  Age:",style: TextStyle(color: Colors.black,fontSize: 18,fontWeight: FontWeight.normal),),
-    SizedBox(width: 10,),
-    Text("${age}",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-  ],
-)),
-),
-],),
-Row(children: [
-  Container(
-
-width: 300,height: 40,
-
-child: Row(
-  children: [
-        Text("  Willaya :  ",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-
-    Text(willaya,style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-  ],
-),
-),
-Container(
- 
-width: 300,height: 40,
-
-child: Row(
-  children: [
-        Text("   Phonenumber :  ",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-
-    Text("${phone}",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-  ],
-),
-),
-Container(
-width: 300,height: 40,
-decoration: BoxDecoration(color: Colors.white,border: Border.symmetric(vertical: BorderSide(width: 0.5,color: Color.fromRGBO(216, 97, 97, 1)))),
-
-child: Row(
-  children: [
-        Text("    Specialite :  ",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-
-    Text(Spec,style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-  ],
-),
-),
-
-
-],),
-Container(
-width: 300,height: 40,
-
-child: Row(
-  children: [
-        Text(" Password:  ",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-
-    Text("************",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.normal),),
-  ],
-),
-),
-],),
-),
-),
-),
-),
 
 
 );

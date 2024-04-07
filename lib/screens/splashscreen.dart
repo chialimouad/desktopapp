@@ -1,45 +1,82 @@
-import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'dart:async';
+
 import 'package:deskapp/screens/logindoc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class Splashscreen extends StatefulWidget {
-  const Splashscreen({super.key});
+  const Splashscreen({Key? key});
 
   @override
   State<Splashscreen> createState() => _SplashscreenState();
 }
 
-class _SplashscreenState extends State<Splashscreen> with SingleTickerProviderStateMixin {
-  // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-  //     Future.delayed(Duration(seconds: 5),(){
-  //      Navigator.pushNamed(context, '/login');
-  //     });
-  // }
+class _SplashscreenState extends State<Splashscreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1500),
+    );
+    _animation = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeInOut,
+    );
+    _controller.forward();
+    Timer(Duration(seconds: 3), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => LoginDoc()),
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color.fromARGB(255, 255, 255, 255),
-      
-      child: AnimatedSplashScreen(
-        splashIconSize: 200,
-        duration: 250,
-        splash: Container(
-          width: 600,
-          height: 700,
-          decoration: BoxDecoration(
-            color: Color.fromARGB(255, 255, 255, 255)
-           ),
-              child: Image.asset("images/PulseLogo1.png",),
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: Center(
+        child: FadeTransition(
+          opacity: _animation,
+          child: ScaleTransition(
+            scale: _animation,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 400,
+                  height: 400,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("images/PulseLogo1.png"),
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color.fromARGB(255, 255, 255, 255).withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 4,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                ),
+]               
+              
+            ),
+          ),
         ),
-        nextScreen: LoginDoc(),
-        splashTransition: SplashTransition.rotationTransition,
-        
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

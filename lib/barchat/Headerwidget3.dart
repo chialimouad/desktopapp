@@ -1,15 +1,18 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-class Headerwidget2 extends StatefulWidget {
-  const Headerwidget2({super.key});
+class Headerwidget3 extends StatefulWidget {
+  const Headerwidget3({super.key});
 
   @override
-  State<Headerwidget2> createState() => _Headerwidget2State();
+  State<Headerwidget3> createState() => _Headerwidget3State();
 }
 
-class _Headerwidget2State extends State<Headerwidget2> {
-  
+class _Headerwidget3State extends State<Headerwidget3> {
+
+
   @override
   Widget build(BuildContext context) {
     return
@@ -18,7 +21,7 @@ class _Headerwidget2State extends State<Headerwidget2> {
           aspectRatio: 16/9,
           child: Container(
             
-            color: Color.fromRGBO(255, 255, 255, 0.949),
+            color: Color.fromRGBO(255, 255, 255, 1),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
@@ -28,11 +31,9 @@ class _Headerwidget2State extends State<Headerwidget2> {
                    Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextButton.icon(onPressed: (){}, icon: Icon(Icons.update,color: Color.fromRGBO(4, 62, 117, 0.95),), label: Text("Update",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700),)),
+                  IconButton(onPressed: (){}, icon: const Icon(Icons.privacy_tip_outlined),color: Color.fromRGBO(0, 0, 0, 1),),
                 const SizedBox(width: 20,)    ,
-                      IconButton(onPressed: (){
-                        Navigator.pop(context);
-                      }, icon: const Icon(Icons.arrow_circle_left_outlined),color: Color.fromRGBO(0, 0, 0, 1),),
+                      IconButton(onPressed: (){}, icon: const Icon(Icons.update_rounded),color: Color.fromRGBO(0, 0, 0, 1),),
                 
                 ],)
                    

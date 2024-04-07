@@ -19,7 +19,7 @@ class _CalendarwidgetState extends State<Calendarwidget> {
       child: Container(
             height: 370,
             width: 320,
-              decoration: BoxDecoration(color: Colors.white,
+              decoration: BoxDecoration(color: const Color.fromARGB(255, 0, 0, 0),
               borderRadius: BorderRadius.circular(5),
               boxShadow: [
                 BoxShadow(
@@ -68,13 +68,13 @@ class _CalendarwidgetState extends State<Calendarwidget> {
                         
                       ),
                       calendarStyle: CalendarStyle(
-                        todayTextStyle:TextStyle(decoration: TextDecoration.none,color: const Color.fromARGB(255, 248, 248, 248),fontSize: 14),
+                        todayTextStyle:TextStyle(decoration: TextDecoration.none,color: Color.fromARGB(255, 255, 0, 0),fontSize: 14),
                           defaultTextStyle:TextStyle(color: Color.fromARGB(222, 3, 3, 3),decoration: TextDecoration.none,fontSize: 15),
                           weekendTextStyle:TextStyle(color: const Color.fromARGB(255, 156, 155, 155),decoration: TextDecoration.none,fontSize: 15),
                            outsideTextStyle:TextStyle(color: Colors.black,decoration: TextDecoration.none,fontSize: 15),
                            selectedTextStyle:TextStyle(fontSize: 20,decoration: TextDecoration.none),
                         todayDecoration: BoxDecoration(
-                          color: Color.fromRGBO(216, 97, 97, 1),
+                          color: Color.fromRGBO(0, 0, 0, 1),
                           
                           shape: BoxShape.circle
                           

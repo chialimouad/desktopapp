@@ -60,7 +60,8 @@ dependencies:
   shared_preferences: ^2.2.2
   jwt_decoder: ^2.0.1
   card_actions: ^0.0.1
-
+  socket_io_client: ^2.0.3+1
+  awesome_dialog: ^3.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -95,6 +96,10 @@ flutter:
     - images/insta.png
     - images/PulseLogo1.png
     - images/nouser.jpg
+    - images/imagedoctor1.jpg
+    - images/imagedoctor2.jpg
+    - images/imagedoctor3.jpg
+   
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

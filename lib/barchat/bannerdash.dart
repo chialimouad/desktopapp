@@ -33,7 +33,7 @@ name=jwtDecodedToken['fullname'];
             Padding(
               padding: const EdgeInsets.only(left: 20),
               child: Container(
-              decoration: BoxDecoration(color: Color.fromRGBO(244, 242, 242, 1),
+              decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.96),
               borderRadius: BorderRadius.circular(20),
               boxShadow: const [
                 BoxShadow(
@@ -53,7 +53,7 @@ name=jwtDecodedToken['fullname'];
                       crossAxisAlignment: CrossAxisAlignment.start,
                   
                     children: [
-                        Text(name,style: TextStyle(color: Color.fromRGBO(216, 97, 97, 1),fontSize: 15,fontWeight: FontWeight.bold),),
+                        Text(name,style: TextStyle(color: Color.fromRGBO(4, 62, 117, 0.95),fontSize: 15,fontWeight: FontWeight.bold),),
                        const Text.rich(
                        TextSpan(
                         style: TextStyle(decoration: TextDecoration.none,color: Colors.black),
@@ -69,12 +69,12 @@ name=jwtDecodedToken['fullname'];
               TextButton.icon(
                    style: TextButton.styleFrom(
                     textStyle: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
-                    backgroundColor: const Color.fromRGBO(216, 97, 97, 1),
+                    backgroundColor: const Color.fromRGBO(4, 62, 117, 0.95),
                     shape:RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
                     ), 
                   ),
-                onPressed: (){}, icon: const Icon(Icons.history), label: Text('History',style: TextStyle(color: Colors.white),))
+                onPressed: (){}, icon: const Icon(Icons.history,color: Colors.white,), label: Text('History',style: TextStyle(color: Colors.white),))
               ],)
                             
                                       

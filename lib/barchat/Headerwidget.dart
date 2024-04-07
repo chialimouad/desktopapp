@@ -1,3 +1,5 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -9,7 +11,8 @@ class Headerwidget extends StatefulWidget {
 }
 
 class _HeaderwidgetState extends State<Headerwidget> {
-  
+
+
   @override
   Widget build(BuildContext context) {
     return
@@ -18,7 +21,7 @@ class _HeaderwidgetState extends State<Headerwidget> {
           aspectRatio: 16/9,
           child: Container(
             
-            color: Color.fromARGB(255, 255, 255, 255),
+            color: Color.fromRGBO(255, 255, 255, 1),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(

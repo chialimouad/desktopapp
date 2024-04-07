@@ -41,8 +41,8 @@ class _EcgState extends State<Ecg> {
     return SafeArea(
         child: Scaffold(
             body: Container(
-              width: 400,
-              height: 300,
+              width: 800,
+              height: 500,
               child: SfCartesianChart(
                   series: <LineSeries<LiveData, num>>[
                         LineSeries<LiveData, num>(
