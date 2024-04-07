@@ -26,7 +26,7 @@ class _HeaderwidgetState extends State<Headerwidget> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-          Text("PULSE X",style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,decoration: TextDecoration.none,color: Colors.black),),
+          Image.asset("images/logomouad.png",),
                 Spacer(),
                    Row(
                   mainAxisSize: MainAxisSize.min,

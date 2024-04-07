@@ -51,7 +51,7 @@ class _SplashscreenState extends State<Splashscreen>
                   height: 400,
                   decoration: BoxDecoration(
                     image: DecorationImage(
-                      image: AssetImage("images/PulseLogo1.png"),
+                      image: AssetImage("images/logomouad.png"),
                       fit: BoxFit.cover,
                     ),
                     borderRadius: BorderRadius.circular(20),

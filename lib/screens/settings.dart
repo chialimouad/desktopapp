@@ -1,9 +1,14 @@
+import 'dart:convert';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:deskapp/barchat/Headerwidget.dart';
 import 'package:deskapp/barchat/Headerwidget3.dart';
+import 'package:deskapp/screens/logindoc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:http/http.dart' as http;
 
 class Settings extends StatefulWidget {
 final token;
@@ -21,6 +26,22 @@ late String willaya;
 late String Spec;
 late int phone;
 late String pass;
+late String id;
+
+ void deleteuser(String id) async {
+    final regbody = {
+      "id": id,
+    };
+    final res = await http.post(
+      Uri.parse("https://s4db.onrender.com/12/deletedoc"),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(regbody),
+    );
+    final neww = jsonDecode(res.body);
+    if (neww['status']) {
+               Navigator.push(context, MaterialPageRoute(builder: ((context) =>LoginDoc())));
+    }
+  }
 @override
 void initState() {
 // TODO: implement initState
@@ -33,7 +54,7 @@ willaya=jwtDecodedToken['willaya'];
 pass=jwtDecodedToken['password'];
 Spec=jwtDecodedToken['Specialite'];
 phone=jwtDecodedToken['phonenumber'];
-
+    id = jwtDecodedToken['id'];
 }
 @override
 Widget build(BuildContext context) {
@@ -45,7 +66,7 @@ body: ListView(
     children: [
       Container(
         width: double.maxFinite,
-        height: 100,
+        height: 70,
         child: Headerwidget3()),
               Text("Your Personal Information Dr.${name}",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 20),),
 
@@ -247,11 +268,41 @@ body: ListView(
                       ),
                       ),
             ],
-          ),      SizedBox(height: 30,),
+          ),      SizedBox(height: 20,),
         ],),
         ),
         ),
-      
+      Container(
+                      decoration: BoxDecoration(color: Colors.white,border: Border.all(color: Colors.black,width: 1),borderRadius: BorderRadius.circular(5)),
+              height: 300,
+        child: Row(
+          children: [
+            Container(
+              child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 255, 0, 0),
+                padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                textStyle: TextStyle(
+                fontWeight: FontWeight.bold,color: Colors.white)),
+                onPressed: (){
+                
+                 AwesomeDialog(
+                  width: 400,
+                context: context,
+                dialogType: DialogType.question,
+                animType: AnimType.bottomSlide,
+                title: 'Delete Your Account',
+                desc: 'Are You Sure!',
+                btnOkOnPress: () {deleteuser(id);},
+              ).show();
+                
+              }, icon: Icon(Icons.delete), label: Text("delete")),
+            ),
+          ],
+        ),
+      ),
+
+      SizedBox(height: 30,)
     ],
   ),]
 ),

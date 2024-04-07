@@ -8,6 +8,7 @@ import 'package:deskapp/bargraph/mybargraph.dart';
 import 'package:deskapp/screens/ecgchartfreq.dart';
 import 'package:deskapp/screens/homelogin.dart';
 import 'package:deskapp/screens/test.dart';
+import 'package:deskapp/screens/test2.dart';
 import 'package:flutter/material.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
@@ -76,14 +77,14 @@ Widget build(BuildContext context) {
     body: Column(
       children: [
         Container(
-          height: 60,
+          height: 70,
           width: double.maxFinite,
           color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: Headerwidget(),
           )),
-     
+          
         Expanded(
           child: Container(
             height: double.maxFinite,
@@ -94,7 +95,7 @@ Widget build(BuildContext context) {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final List items = snapshot.data as List;
-                  return DataTable(
+                  return  items==null?Image.asset('images/nouser.jpg'): DataTable(
                     columns: [
                       DataColumn(label: Text('Full Name')),
                       DataColumn(label: Text('Age')),
@@ -134,7 +135,11 @@ Widget build(BuildContext context) {
                     }).toList(),
                   );
                 } else {
-                  return Center(child: CircularProgressIndicator());
+                  return 
+                        Center(
+                          child: CircularProgressIndicator(),
+                          );
+                  
                 }
               },
             ),
@@ -183,7 +188,7 @@ Widget build(BuildContext context) {
                     child: Container(
                       width: 500,
                       height: 500,
-                      child: Ecg(title: "title"),
+                      child: EcgChart(),
                     ),
                   ),
                   Center(

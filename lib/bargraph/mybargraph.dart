@@ -80,12 +80,12 @@ class _RealTimeBarChartState extends State<RealTimeBarChart> {
       setState(() {
         // Update data with random values for other days
         for (int i = 0; i < data.length; i++) {
-          if (i == DateTime.now().weekday ) {
+          if (i == DateTime.now().day ) {
             // Set today's value to 4 (assuming today is Wednesday)
-            data[i] = 5;
+            data[i] = widget.valuek;
           } else {
             // Generate a random value between 0 and 100 for other days
-            data[i] = data[i];
+            data[i] = 0;
           }
         }
       });
@@ -107,25 +107,25 @@ class _RealTimeBarChartState extends State<RealTimeBarChart> {
     String text;
     switch (value.toInt()) {
       case 0:
-        text = 'St';
-        break;
-      case 1:
         text = 'Sn';
         break;
-      case 2:
+      case 1:
         text = 'Mn';
         break;
-      case 3:
+      case 2:
         text = 'Te';
         break;
-      case 4:
+      case 3:
         text = 'Wed';
         break;
-      case 5:
+      case 4:
         text = 'Tu';
         break;
-      case 6:
+      case 5:
         text = 'Fr';
+        break;
+      case 6:
+        text = 'St';
         break;
       default:
         text = '';

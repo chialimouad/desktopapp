@@ -77,7 +77,7 @@ child: MoveWindow(),
 ),
 //header
 Container(
-height: 40,
+height: 60,
 width: double.maxFinite,
 child: Headerwidget(),
 ),

@@ -49,7 +49,7 @@ class Left extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.asset("images/PULSE.png", width: 200, height: 200),
+          Image.asset("images/logomouad.png", width: 200, height: 200),
         ],
       ),
       width: double.infinity,

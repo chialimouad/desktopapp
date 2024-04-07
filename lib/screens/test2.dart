@@ -1,74 +1,81 @@
+import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 
 
-class SearchBarApp extends StatefulWidget {
-  const SearchBarApp({super.key});
-
+class EcgChart extends StatefulWidget {
   @override
-  State<SearchBarApp> createState() => _SearchBarAppState();
+  _EcgChartState createState() => _EcgChartState();
 }
 
-class _SearchBarAppState extends State<SearchBarApp> {
-  bool isDark = false;
+class _EcgChartState extends State<EcgChart> {
+  List<double> hourlyHeartbeatValues = List.filled(24, 0); // Initialize with zeros for 24 hours
+  late Timer timer;
+  Random random = Random();
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  void startTimer() {
+    // Simulate real-time data updates every second
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        // Update heartbeat values for each hour
+        for (int i = 0; i < hourlyHeartbeatValues.length; i++) {
+          hourlyHeartbeatValues[i] = random.nextDouble() * 100; // Random values between 0 and 100
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData themeData = ThemeData(
-        useMaterial3: true,
-        brightness: isDark ? Brightness.dark : Brightness.light);
+    return Scaffold(
+      body: Container(
 
-    return MaterialApp(
-      theme: themeData,
-      home: Scaffold(
-        appBar: AppBar(title: const Text('Search Bar Sample')),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: SearchAnchor(
-              builder: (BuildContext context, SearchController controller) {
-            return SearchBar(
-              controller: controller,
-              padding: const MaterialStatePropertyAll<EdgeInsets>(
-                  EdgeInsets.symmetric(horizontal: 16.0)),
-              onTap: () {
-                controller.openView();
-              },
-              onChanged: (_) {
-                controller.openView();
-              },
-              leading: const Icon(Icons.search),
-              trailing: <Widget>[
-                Tooltip(
-                  message: 'Change brightness mode',
-                  child: IconButton(
-                    isSelected: isDark,
-                    onPressed: () {
-                      setState(() {
-                        isDark = !isDark;
-                      });
-                    },
-                    icon: const Icon(Icons.wb_sunny_outlined),
-                    selectedIcon: const Icon(Icons.brightness_2_outlined),
-                  ),
-                )
-              ],
-            );
-          }, suggestionsBuilder:
-                  (BuildContext context, SearchController controller) {
-            return List<ListTile>.generate(5, (int index) {
-              final String item = 'item $index';
-              return ListTile(
-                title: Text(item),
-                onTap: () {
-                  setState(() {
-                    controller.closeView(item);
-                  });
-                },
-              );
-            });
-          }),
+        padding: EdgeInsets.all(16),
+        child: LineChart(
+          LineChartData(
+            lineBarsData: [
+              LineChartBarData(
+                spots: List.generate(
+                  hourlyHeartbeatValues.length,
+                  (index) => FlSpot(index.toDouble(), hourlyHeartbeatValues[index]),
+                ),
+                isCurved: true,
+                color: Colors.blue,
+                barWidth: 2,
+                belowBarData: BarAreaData(show: false),
+                dotData: FlDotData(show: false),
+              ),
+            ],
+            titlesData: FlTitlesData(
+              
+              bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              
+              
+            ),
+          ),
+              
+           
+          ),
+           borderData: FlBorderData(show: false),
+            gridData: FlGridData(show: false),
         ),
-      ),
+      )),
     );
   }
 }

@@ -1,7 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 import 'dart:ui';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:deskapp/bargraph/mybargraph.dart';
 import 'package:deskapp/screens/allpatients.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:deskapp/barchat/Headerwidget.dart';
@@ -73,7 +77,7 @@ class _AddusersState extends State<Addusers> {
 
   TextEditingController IdOfpulse = TextEditingController();
     TextEditingController moredata = TextEditingController();
-
+int v=0;
   late SharedPreferences prefs;
   late String userid;
   final formKey = GlobalKey<FormState>();
@@ -85,12 +89,49 @@ class _AddusersState extends State<Addusers> {
     userid = jwtDecodedToken['id'];
     initShared();
   }
+    final picker = ImagePicker();
+  File? image;
+
+Future pickimage()async{
+try{
+final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+if(image==null)
+return;
+final imagetomp=File(image.path);
+setState(() {
+this.image=imagetomp;
+});
+}on PlatformException catch(err){
+print(err);
+}
+
+}
+
+  Future uploadImage() async {
+    if (image == null) {
+      print('No image selected.');
+      return;
+    }
+
+    var request = http.MultipartRequest('POST', Uri.parse('https://s4db.onrender.com/12/registerdoctor'));
+    request.files.add(await http.MultipartFile.fromPath('photo', image!.path));
+
+    var response = await request.send();
+
+    if (response.statusCode == 201) {
+      print('Image uploaded successfully.');
+    } else {
+      print('Failed to upload image. Status code: ${response.statusCode}');
+    }
+  }
+
 
   initShared() async {
     prefs = await SharedPreferences.getInstance();
   }
 
   insertData() async {
+
     if (email.text.isNotEmpty && Password.text.isNotEmpty && Fullname.text.isNotEmpty && Willaya.text.isNotEmpty) {
       var regbody = {
         "email": email.text,
@@ -106,6 +147,7 @@ class _AddusersState extends State<Addusers> {
         "Gender":gndr!.label.toString(),
         "mld":mlde!.label.toString(),
         "moredata":moredata.text,
+        
       };
       var res = await http.post(Uri.parse("https://s4db.onrender.com/12/registeruser"),
         headers: {"Content-Type":"application/json"},
@@ -114,6 +156,12 @@ class _AddusersState extends State<Addusers> {
       var resjson = jsonDecode(res.body);
       print(res.body);
       if (resjson['status']) {
+       if(DateTime.now().day==true){
+        v=v++;
+       }else{
+        v=0;
+       };
+       RealTimeBarChart(valuek: v,);
         AwesomeDialog(
           context: context,
           dialogType: DialogType.success,
@@ -138,7 +186,7 @@ class _AddusersState extends State<Addusers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(255, 255, 255, 0.949),
+      backgroundColor: Color.fromRGBO(255, 255, 255, 1),
       body: Expanded(
         child: Center(
           child: ListView(
@@ -164,7 +212,7 @@ width: double.maxFinite,
                         ),
                       ),
                       Container(
-                        height: 40,
+                        height: 70,
                         width: double.maxFinite,
                         child: Headerwidget(),
                       ),
@@ -172,7 +220,7 @@ width: double.maxFinite,
                         padding: const EdgeInsets.only(top: 20.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 255, 81, 0),
+                            color: Color.fromRGBO(0, 52, 102, 1),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           width: 600,
@@ -470,7 +518,24 @@ width: double.maxFinite,
                                 }, 
                                 child: const Text("Add Patient Now",style: TextStyle(color: Colors.white,))
                               ),
-                              SizedBox(height: 200,)
+                              SizedBox(height: 200,),
+                              Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            image == null
+               ? Text('No image selected.')
+                : Image.file(image!),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: pickimage,
+              child: Text('Select Image'),
+            ),
+            ElevatedButton(
+              onPressed: uploadImage,
+              child: Text('Upload Image'),
+            ),
+          ],
+        ),
                             ],
                           ),
                         ],
