@@ -11,6 +11,7 @@ class Headerwidget3 extends StatefulWidget {
 }
 
 class _Headerwidget3State extends State<Headerwidget3> {
+bool hinttext=false;
 
 
   @override
@@ -33,11 +34,19 @@ class _Headerwidget3State extends State<Headerwidget3> {
                   children: [
                   IconButton(onPressed: (){}, icon: const Icon(Icons.privacy_tip_outlined),color: Color.fromRGBO(0, 0, 0, 1),),
                 const SizedBox(width: 20,)    ,
-                      IconButton(onPressed: (){}, icon: const Icon(Icons.update_rounded),color: Color.fromRGBO(0, 0, 0, 1),),
-                
-                ],)
-                   
-                
+                      IconButton(onPressed: (){
+                        setState(() {
+                          hinttext=!hinttext;
+                        });
+                      }, icon: const Icon(Icons.update_rounded),color: Color.fromRGBO(0, 0, 0, 1),),
+                      
+         
+                ],),
+                 
+                        if(hinttext)Container(
+                    width: 300,
+                    height: 500,
+                    decoration: BoxDecoration(color: const Color.fromARGB(255, 126, 124, 124),borderRadius: BorderRadius.circular(20)),)
                 ],),
               ),
             

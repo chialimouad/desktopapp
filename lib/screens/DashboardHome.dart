@@ -35,6 +35,7 @@ class _DashboarState extends State<Dashboar> {
       late String name;
     late int age;
     late String street;
+    File?image;
   @override
   void initState() {
     // TODO: implement initState
@@ -43,22 +44,10 @@ class _DashboarState extends State<Dashboar> {
     age=jwtDecodedToken['Age'];
     name=jwtDecodedToken['fullname'];
     street=jwtDecodedToken['willaya'];
-  }
-  File? image;
-Future pickimage()async{
-try{
-final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-if(image==null)
-return;
-final imagetomp=File(image.path);
-setState(() {
-this.image=imagetomp;
-});
-}on PlatformException catch(err){
-print(err);
-}
+        image=jwtDecodedToken['data'];
 
-}
+  }
+
 @override
   void setState(VoidCallback fn)async {
     // TODO: implement setState
@@ -102,23 +91,25 @@ print(err);
                Expanded(
                
                child: Container(
-               color: Color.fromRGBO(4, 62, 117, 1),
+               color: Color.fromRGBO(255, 255, 255, 1),
                child: Padding(
-               padding: const EdgeInsets.only(left: 10.0),
+               padding: const EdgeInsets.only(left: 0.0),
                child: Center(
                child: Row(
                children: [
                NavigationRail(
-               selectedIconTheme: const IconThemeData(color: Colors.white),
-               unselectedIconTheme: const IconThemeData(color: Colors.black),
+                
+               selectedIconTheme: const IconThemeData(color: Color.fromRGBO(0, 52, 102, 1)),
+               unselectedIconTheme: const IconThemeData(color: Color.fromARGB(255, 255, 255, 255)),
                selectedLabelTextStyle: const TextStyle(color: Colors.white,decoration: TextDecoration.none,fontSize: 13),
                indicatorColor: const Color.fromRGBO(255, 255, 255, 1),    
                labelType: NavigationRailLabelType.all,
-               minWidth: 50,
+               
+               minWidth: 80,
                
                groupAlignment: 0.08,
-               
-               useIndicator: false,
+              
+               useIndicator: true,
                backgroundColor: Color.fromRGBO(4, 62, 117, 0.813),
                onDestinationSelected: (int index) => setState(() {
                selected=index;
@@ -132,26 +123,26 @@ print(err);
                NavigationRailDestination(
                icon:
                Padding(
-               padding: EdgeInsets.only(top: 5.0),
+               padding: EdgeInsets.only(top: 0.0),
                child: Icon(Icons.person),
                ),
-               label: Text("Patients")),
+               label: Text("Patients",style: TextStyle(color: Colors.white))),
                NavigationRailDestination(icon: Padding(
-               padding: EdgeInsets.only(top: 5.0),
+               padding: EdgeInsets.only(top: 0.0),
                child: Icon(Icons.add,),
-               ), label: Text("Add")),
+               ), label: Text("Add",style: TextStyle(color: Colors.white))),
                NavigationRailDestination(icon: Padding(
-               padding: EdgeInsets.only(top: 5.0),
+               padding: EdgeInsets.only(top: 0.0),
                child: Icon(Icons.history),
-               ), label: Text("History")),
+               ), label: Text("History",style: TextStyle(color: Colors.white),)),
                NavigationRailDestination(icon: Padding(
-               padding: EdgeInsets.only(top: 5.0),
+               padding: EdgeInsets.only(top: 0.0),
                child: Icon(Icons.info,weight: 40,),
-               ), label: Text("Infos")),
+               ), label: Text("Infos",style: TextStyle(color: Colors.white))),
                NavigationRailDestination(icon: Padding(
-               padding: EdgeInsets.only(top: 5.0),
+               padding: EdgeInsets.only(top: 0.0),
                child: Icon(Icons.settings_accessibility_rounded),
-               ), label: Text("Settings")),
+               ), label: Text("Settings",style: TextStyle(color: Colors.white))),
                ], selectedIndex: selected),
                Expanded(
                
@@ -208,13 +199,7 @@ print(err);
           :Image.asset('images/doctor.jpg'),//Text
           ),),),
          
-         SizedBox(
-          height: 40,
-          width: 40,
-          child: IconButton(onPressed: (){
-          pickimage();
-          }, icon: const Icon(Icons.add)),
-          ),
+       
           
            Text(name,style: TextStyle(
           decoration: TextDecoration.none,
@@ -284,12 +269,10 @@ print(err);
           ),
           const SizedBox(height: 30,),
           Center(child: Container(
-          child: const Column(
-          children: [
+          child:
           Calendarwidget(),
           
-          ],
-          ))),
+         )),
           Padding(
           padding: const EdgeInsets.only(top: 30,left: 20,right: 20),
           child: Row(

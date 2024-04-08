@@ -1,72 +1,59 @@
+import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-class Mychart extends StatefulWidget {
-  const Mychart({super.key});
+
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
-  State<Mychart> createState() => _MychartState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MychartState extends State<Mychart> {
-          FlTitlesData get titlesData => const FlTitlesData(
-        show: true,
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 30,
-           
-          ),
-        ),
-        leftTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        topTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-        rightTitles: AxisTitles(
-          sideTitles: SideTitles(showTitles: false),
-        ),
-      );
-        FlBorderData get borderData => FlBorderData(
-        show: false,
-      );
+class _MyHomePageState extends State<MyHomePage> {
+  String searchValue = '';
+  final List<String> _suggestions = ['Afeganistan', 'Albania', 'Algeria', 'Australia', 'Brazil', 'German', 'Madagascar', 'Mozambique', 'Portugal', 'Zambia'];
+
   @override
   Widget build(BuildContext context) {
-    return
-       Scaffold(
-        
-         body: LineChart(
-           LineChartData(
-             lineBarsData: [
-               LineChartBarData(
-                 spots: [
-                   FlSpot(0, 1),
-                   FlSpot(1, 3),
-                   FlSpot(2, 2),
-                   FlSpot(3, 4),
-                   FlSpot(4, 3),
-                   FlSpot(5, 5),
-                   FlSpot(6, 4),
-                 ],
-                 isCurved: true, // Set to true to make the line curved
-                 color: Color.fromARGB(255, 16, 181, 21),
-                 barWidth: 4,
-                 belowBarData: BarAreaData(
-                   show: false,
-                 ),
-               ),
-             ],
-             borderData: borderData,
-             gridData: FlGridData(show: false),
-             titlesData:titlesData,
-             
-             minX: 0,
-             maxX: 6,
-             minY: 0,
-             maxY: 6,
-           ),
-         ),
-       );
-    
+    return  MaterialApp(
+      title: 'Example',
+      theme: ThemeData(
+        primarySwatch: Colors.orange
+      ),
+      home: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Scaffold(
+          appBar: EasySearchBar(
+            title: const Text('Example'),
+            onSearch: (value) => setState(() => searchValue = value),
+            suggestions: _suggestions
+          ),
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: [
+                const DrawerHeader(
+                  decoration: BoxDecoration(
+                    color: Colors.blue,
+                  ),
+                  child: Text('Drawer Header'),
+                ),
+                ListTile(
+                  title: const Text('Item 1'),
+                  onTap: () => Navigator.pop(context)
+                ),
+                ListTile(
+                  title: const Text('Item 2'),
+                  onTap: () => Navigator.pop(context)
+                )
+              ]
+            )
+          ),
+          body: Center(
+            child: Text('Value: $searchValue')
+          )
+        ),
+      )
+    );
   }
 }

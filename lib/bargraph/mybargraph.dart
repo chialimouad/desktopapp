@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'dart:math';
 
 
 
@@ -82,10 +81,10 @@ class _RealTimeBarChartState extends State<RealTimeBarChart> {
         for (int i = 0; i < data.length; i++) {
           if (i == DateTime.now().day ) {
             // Set today's value to 4 (assuming today is Wednesday)
-            data[i] = widget.valuek;
+            data[i] = 5;
           } else {
             // Generate a random value between 0 and 100 for other days
-            data[i] = 0;
+            data[i] = 6;
           }
         }
       });
@@ -141,32 +140,43 @@ class _RealTimeBarChartState extends State<RealTimeBarChart> {
   Widget build(BuildContext context) {
     return 
           
-            BarChart(
-              BarChartData(
-                borderData:borderData,
-                barTouchData:barTouchData,
-                titlesData:titlesData,
-                gridData: FlGridData(show: false),
-                alignment: BarChartAlignment.spaceAround,
-                maxY: data.reduce((value, element) => value > element ? value : element) + 10,
-                barGroups: [
-                  for (int i = 0; i < data.length; i++)
-                    BarChartGroupData(
-                      x: i,
-                      barRods: [
-                        BarChartRodData(
+            Scaffold(
+              body: BarChart(
+                BarChartData(
+                  borderData:borderData,
+                  barTouchData:barTouchData,
+                  titlesData:titlesData,
+                  gridData: FlGridData(show: false),
+                  alignment: BarChartAlignment.spaceAround,
+                  maxY: data.reduce((value, element) => value > element ? value : element) + 10,
+                  barGroups: [
+                    for (int i = 0; i < data.length; i++)
+                      BarChartGroupData(
+                        x: i,
+                        barRods: [
+                          BarChartRodData(
+                            
+                            toY: data[i],
+                            color: Colors.blue,
+                          ),
                           
-                          toY: data[i],
-                          color: Colors.blue,
-                        ),
-                        
-                      ],
-                                                showingTooltipIndicators: [0],
-
-                    ),
-                ],
+                        ],
+                                                  showingTooltipIndicators: [0],
+              
+                      ),
+                  ],
+                ),
               ),
+
+                            appBar: AppBar(title: Column(
+                              children: [
+                                Text("Users Added By day:",style: TextStyle(fontSize: 13),),
+                                 Text("------------------------",style: TextStyle(fontSize: 13),),
+                              ],
+                            ),),
+
             );
+
       
     
   }

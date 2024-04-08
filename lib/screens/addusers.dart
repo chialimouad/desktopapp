@@ -2,6 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:ui';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:deskapp/barchat/Headerwidget3.dart';
+import 'package:deskapp/barchat/headerwidget2.dart';
+import 'package:deskapp/barchat/headerwidget4.dart';
 import 'package:deskapp/bargraph/mybargraph.dart';
 import 'package:deskapp/screens/allpatients.dart';
 import 'package:flutter/services.dart';
@@ -214,7 +217,7 @@ width: double.maxFinite,
                       Container(
                         height: 70,
                         width: double.maxFinite,
-                        child: Headerwidget(),
+                        child: Headerwidget4(),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 20.0),
