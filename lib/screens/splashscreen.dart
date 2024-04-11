@@ -52,7 +52,7 @@ class _SplashscreenState extends State<Splashscreen>
                   decoration: BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage("images/logomouad.png"),
-                      fit: BoxFit.cover,
+                      fit: BoxFit.scaleDown,
                     ),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [

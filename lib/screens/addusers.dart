@@ -83,6 +83,8 @@ class _AddusersState extends State<Addusers> {
 int v=0;
   late SharedPreferences prefs;
   late String userid;
+    late String docname;
+
   final formKey = GlobalKey<FormState>();
     final formKey1 = GlobalKey<FormState>();
   @override
@@ -90,6 +92,7 @@ int v=0;
     super.initState();
     Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
     userid = jwtDecodedToken['id'];
+     docname = jwtDecodedToken['fullname'];
     initShared();
   }
     final picker = ImagePicker();
@@ -150,6 +153,7 @@ print(err);
         "Gender":gndr!.label.toString(),
         "mld":mlde!.label.toString(),
         "moredata":moredata.text,
+        "docname":docname
         
       };
       var res = await http.post(Uri.parse("https://s4db.onrender.com/12/registeruser"),

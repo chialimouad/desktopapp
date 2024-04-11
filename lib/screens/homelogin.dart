@@ -33,7 +33,8 @@ getUser(userid);
 }
 
 void getUser(userid) async {
-var regbody = {
+try {
+  var regbody = {
 "userId": userid,
 };
 var response = await http.post(
@@ -45,6 +46,9 @@ var newtoken = jsonDecode(response.body);
 setState(() {
 items = newtoken['success'];
 });
+} catch (err) {
+  
+}
 }
 
 
@@ -160,10 +164,7 @@ SizedBox(width: 70),
 Column(
 children: [
 Container(
-  decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(3),boxShadow: [
-    BoxShadow(blurRadius: 0.3,offset: Offset(0.3,0.3),),
-    
-  ],
+  decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.circular(3),
   ),
   width: 300,
   height: 30,
@@ -186,10 +187,7 @@ height: 300,
 decoration: BoxDecoration(
 color: Color.fromARGB(255, 255, 255, 255),
 borderRadius: BorderRadius.circular(5),
-boxShadow: [
-    BoxShadow(blurRadius: 0.3,offset: Offset(0.3,0.3),),
-    
-  ],
+
 ),
 child: items == null
 ? Container(

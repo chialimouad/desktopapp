@@ -28,7 +28,6 @@ class _Headerwidget2State extends State<Headerwidget2> {
                    Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    TextButton.icon(onPressed: (){}, icon: Icon(Icons.update,color: Color.fromRGBO(4, 62, 117, 0.95),), label: Text("Update",style: TextStyle(color: Colors.black,fontSize: 16,fontWeight: FontWeight.w700),)),
                 const SizedBox(width: 20,)    ,
                       IconButton(onPressed: (){
                         Navigator.pop(context);

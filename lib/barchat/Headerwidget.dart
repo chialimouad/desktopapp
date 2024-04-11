@@ -55,7 +55,7 @@ final textcontroller = TextEditingController();
       print(res.body);
       if (resjson['status']) {
                                          
-      showMyDialog('${resjson['success']!['fullname']}', '${resjson['success']['Age']}', '${resjson['success']['willaya']}', '${resjson['success']['phonenumber']}');
+      showMyDialog('${resjson['success']!['fullname']}', '${resjson['success']['Age']}', '${resjson['success']['willaya']}', '${resjson['success']['phonenumber']}','${resjson['success']['docname']}');
 
       } else {
          showDialog(
@@ -111,6 +111,7 @@ final textcontroller = TextEditingController();
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     children: [
+                      SizedBox(width: 100,),
                        Image.asset("images/logomouad.png",),
                   Spacer(),
                      Row(
@@ -128,8 +129,8 @@ final textcontroller = TextEditingController();
                         autoFocus: true,
                         animationDurationInMilli: 600,
                        rtl: true,
-                        )
-                  
+                        ),
+                   SizedBox(width: 100,)
                   ],)
                      
                   
@@ -144,7 +145,7 @@ final textcontroller = TextEditingController();
       
     
   }
-    Future<void> showMyDialog(String name, String age, String willaya, String Number) async {
+    Future<void> showMyDialog(String name, String age, String willaya, String Number,String docname) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false,
@@ -174,6 +175,8 @@ final textcontroller = TextEditingController();
                         Text(" The age of your Patient :$age"),
                         Text(" The willaya of your Patient :$willaya"),
                         Text(" The Phone Number  of your Patient :+$Number"),
+                        Text(" The name of Doctor  :$docname"),
+
                       ],
                     ),
                   ),

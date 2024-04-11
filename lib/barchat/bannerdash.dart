@@ -31,10 +31,10 @@ name=jwtDecodedToken['fullname'];
         child: Column(
           children: [
             Padding(
-              padding: const EdgeInsets.only(left: 20),
+              padding: const EdgeInsets.only(left: 10),
               child: Container(
               decoration: BoxDecoration(color: Color.fromRGBO(255, 255, 255, 0.96),
-              borderRadius: BorderRadius.circular(20),
+              borderRadius: BorderRadius.circular(6),
               boxShadow: const [
                 BoxShadow(
                   blurRadius: 1,
@@ -42,7 +42,7 @@ name=jwtDecodedToken['fullname'];
                 )
               ]
               ),
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(15),
               child:    Column(
                 children: [
                   Row(

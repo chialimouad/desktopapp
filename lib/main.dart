@@ -1,19 +1,10 @@
 
 import 'package:deskapp/screens/DashboardHome.dart';
-import 'package:deskapp/screens/addusers.dart';
-import 'package:deskapp/screens/allpatients.dart';
-import 'package:deskapp/screens/logindoc.dart';
 import 'package:deskapp/screens/splashscreen.dart';
-import 'package:provider/provider.dart'; // You might need to import other state management libraries if you choose them.
-
-import 'package:deskapp/screens/test.dart';
-import 'package:deskapp/screens/test2.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'bargraph/linechart.dart';
 
 
 void main()async {
