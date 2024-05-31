@@ -1,60 +1,56 @@
-import 'dart:async';
-import 'package:flutter/material.dart';
+import 'dart:convert';
+
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+class UserCountModel extends ChangeNotifier {
+  late List<int> userCountByDay;
 
+  UserCountModel() {
+        userCountByDay = List<int>.filled(7, 0);
 
-class RealTimeBarChart extends StatefulWidget {
-     final valuek;
-     RealTimeBarChart({super.key, this.valuek,});
-  @override
-  _RealTimeBarChartState createState() => _RealTimeBarChartState();
+    _loadUserCountFromPrefs();
+  }
+
+  void _loadUserCountFromPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final userCountJson = prefs.getString('userCountByDay');
+    if (userCountJson != null) {
+      userCountByDay = List<int>.from(jsonDecode(userCountJson));
+    } else {
+      // Initialize with zeros if no data is found in SharedPreferences
+      userCountByDay = List<int>.filled(7, 0);
+    }
+    notifyListeners();
+  }
+
+  Future<void> _saveUserCountToPrefs() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setString('userCountByDay', jsonEncode(userCountByDay));
+  }
+
+  void addUser() {
+    // Logic to add user and update user count for the current day
+    final currentDayIndex = DateTime.now().weekday % 7;
+    userCountByDay[currentDayIndex]++;
+    // Save updated user count to SharedPreferences
+    _saveUserCountToPrefs();
+    notifyListeners();
+  }
+    void minuser() {
+    // Logic to add user and update user count for the current day
+    final currentDayIndex = DateTime.now().weekday % 7;
+    userCountByDay[currentDayIndex]--;
+    // Save updated user count to SharedPreferences
+    _saveUserCountToPrefs();
+    notifyListeners();
+  }
 }
 
-class _RealTimeBarChartState extends State<RealTimeBarChart> {
-  List<double> data = List.filled(7, 0); // Initialize with zeros for 7 days
-  late Timer timer;
-
-  @override
-  void initState() {
-    super.initState();
-    startTimer();
-  }
-    LinearGradient get _barsGradient => LinearGradient(
-        colors: [
-         Color.fromARGB(255, 180, 179, 179),
-         Color.fromARGB(255, 180, 189, 179)
-        ],
-        begin: Alignment.bottomCenter,
-        end: Alignment.topCenter,
-      );
-  FlBorderData get borderData => FlBorderData(
-        show: false,
-      );
-      
-  BarTouchData get barTouchData => BarTouchData(
-        enabled: false,
-        touchTooltipData: BarTouchTooltipData(
-          tooltipBgColor: Colors.transparent,
-          tooltipPadding: EdgeInsets.zero,
-          tooltipMargin: 8,
-          getTooltipItem: (
-            BarChartGroupData group,
-            int groupIndex,
-            BarChartRodData rod,
-            int rodIndex,
-          ) {
-            return BarTooltipItem(
-              rod.toY.round().toString(),
-              const TextStyle(
-                color: Color.fromRGBO(4, 62, 117, 0.95),
-                fontWeight: FontWeight.bold,
-              ),
-            );
-          },
-        ),
-      );
-        FlTitlesData get titlesData => FlTitlesData(
+class UserCountPage extends StatelessWidget {
+          FlTitlesData get titlesData => FlTitlesData(
         show: true,
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
@@ -73,31 +69,7 @@ class _RealTimeBarChartState extends State<RealTimeBarChart> {
           sideTitles: SideTitles(showTitles: false),
         ),
       );
-  void startTimer() {
-    // Simulate real-time data updates every second
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        // Update data with random values for other days
-        for (int i = 0; i < data.length; i++) {
-          if (i == DateTime.now().day ) {
-            // Set today's value to 4 (assuming today is Wednesday)
-            data[i] = 5;
-          } else {
-            // Generate a random value between 0 and 100 for other days
-            data[i] = 6;
-          }
-        }
-      });
-    });
-  }
-
-  @override
-  void dispose() {
-    timer.cancel();
-    super.dispose();
-  }
-  
-  Widget getTitles(double value, TitleMeta meta) {
+    Widget getTitles(double value, TitleMeta meta) {
     final style = TextStyle(
       color: Colors.black,
       fontWeight: FontWeight.bold,
@@ -138,46 +110,36 @@ class _RealTimeBarChartState extends State<RealTimeBarChart> {
   }
   @override
   Widget build(BuildContext context) {
-    return 
-          
-            Scaffold(
-              body: BarChart(
-                BarChartData(
-                  borderData:borderData,
-                  barTouchData:barTouchData,
-                  titlesData:titlesData,
-                  gridData: FlGridData(show: false),
-                  alignment: BarChartAlignment.spaceAround,
-                  maxY: data.reduce((value, element) => value > element ? value : element) + 10,
-                  barGroups: [
-                    for (int i = 0; i < data.length; i++)
-                      BarChartGroupData(
-                        x: i,
-                        barRods: [
-                          BarChartRodData(
-                            
-                            toY: data[i],
-                            color: Colors.blue,
-                          ),
-                          
-                        ],
-                                                  showingTooltipIndicators: [0],
-              
-                      ),
-                  ],
-                ),
-              ),
+    final userCountModel = Provider.of<UserCountModel>(context);
+    List<int> userCounts = Provider.of<UserCountModel>(context).userCountByDay;
 
-                            appBar: AppBar(title: Column(
-                              children: [
-                                Text("Users Added By day:",style: TextStyle(fontSize: 13),),
-                                 Text("------------------------",style: TextStyle(fontSize: 13),),
-                              ],
-                            ),),
+    final int totalUserCount = userCountModel.userCountByDay.fold<int>(0, (prev, count) => prev + count);
 
-            );
+    final List<BarChartGroupData> barChartData = List.generate(7, (index) {
+      final double value = userCountModel.userCountByDay[index].toDouble();
+      return BarChartGroupData(x: index, barRods: [BarChartRodData(toY: value)]);
+    });
 
-      
-    
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(' ${totalUserCount}'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: BarChart(
+          BarChartData(
+            alignment: BarChartAlignment.spaceAround,
+            maxY: userCountModel.userCountByDay.reduce((value, element) => value > element ? value : element).toDouble(),
+            minY: 0,
+            barTouchData: BarTouchData(enabled: false),
+            titlesData: titlesData,
+            gridData: FlGridData(show: false),
+
+            borderData: FlBorderData(show: false),
+            barGroups: barChartData,
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -4,13 +4,23 @@ import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:deskapp/barchat/headerwidget2.dart';
+import 'package:deskapp/bargraph/piechart.dart';
 import 'package:deskapp/screens/test2.dart';
 import 'package:easy_search_bar/easy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
+class notifbpm extends ChangeNotifier {
+  late double averageBPM=0.0;
 
+  void setAverageBPM(double value) {
+    averageBPM = value;
+   
+    
+  }
+}
 class Headerwidget extends StatefulWidget {
   const Headerwidget({super.key});
 
@@ -21,6 +31,8 @@ class Headerwidget extends StatefulWidget {
 class _HeaderwidgetState extends State<Headerwidget> {
 final textcontroller = TextEditingController();
   List<String> searchResults = [];
+    late double receivedValue;
+
    getdata() async {
 
      
@@ -99,6 +111,9 @@ final textcontroller = TextEditingController();
   }
   @override
   Widget build(BuildContext context) {
+        receivedValue = Provider.of<notifbpm>(context, listen: false).averageBPM;
+      
+
     return
        
        
@@ -108,7 +123,7 @@ final textcontroller = TextEditingController();
               
               color: Color.fromRGBO(255, 255, 255, 1),
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(7.0),
                   child: Row(
                     children: [
                       SizedBox(width: 100,),
@@ -117,7 +132,26 @@ final textcontroller = TextEditingController();
                      Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                    IconButton(onPressed: (){}, icon: const Icon(Icons.notifications),color: Color.fromRGBO(0, 0, 0, 1),),
+                    Container(
+                      child: Stack(
+                        
+                        children: [
+
+                          Column(
+                            children: [
+                              if(receivedValue>100 || receivedValue<50)
+                               CircleAvatar(
+                                backgroundColor: const Color.fromARGB(255, 255, 17, 0),radius: 2.5,),
+
+                              IconButton(onPressed: (){
+                                      
+                              
+                              }, icon: const Icon(Icons.notifications),color: Color.fromRGBO(0, 0, 0, 1),),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   const SizedBox(width: 20,)    ,
                         AnimSearchBar(width: 400, textController: textcontroller, onSuffixTap: (){
                           setState(() {
@@ -180,13 +214,13 @@ final textcontroller = TextEditingController();
                       ],
                     ),
                   ),
-                  Center(
-                    child: Container(
-                      width: 500,
-                      height: 500,
-                      child: EcgChart(),
-                    ),
-                  ),
+                  // Center(
+                  //   child: Container(
+                  //     width: 500,
+                  //     height: 500,
+                  //     child: ECGLineChart(),
+                  //   ),
+                  // ),
                   Center(
                     child: Container(
                       width: 500,

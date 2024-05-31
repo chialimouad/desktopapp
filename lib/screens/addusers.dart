@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'dart:io';
 import 'dart:ui';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
@@ -6,10 +7,12 @@ import 'package:deskapp/barchat/Headerwidget3.dart';
 import 'package:deskapp/barchat/headerwidget2.dart';
 import 'package:deskapp/barchat/headerwidget4.dart';
 import 'package:deskapp/bargraph/mybargraph.dart';
+import 'package:deskapp/screens/DashboardHome.dart';
 import 'package:deskapp/screens/allpatients.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:deskapp/barchat/Headerwidget.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,6 +23,29 @@ import 'package:validators/validators.dart';
 import 'package:http/http.dart' as http;
 import 'package:awesome_dialog/awesome_dialog.dart';
 
+class PatientData {
+  final String sensor;
+  final int value;
+  final DateTime timestamp;
+
+  PatientData({
+    required this.sensor,
+    required this.value,
+    required this.timestamp,
+  });
+
+  factory PatientData.fromJson(Map<String, dynamic> json) {
+    final String sensor = json['sensor'] ?? '';
+    final int value = json['value'] ?? 0;
+    final DateTime timestamp = DateTime.tryParse(json['timestamp'] ?? '') ?? DateTime.now();
+
+    return PatientData(
+      sensor: sensor,
+      value: value,
+      timestamp: timestamp,
+    );
+  }
+}
 enum GrpLabel {
   O('0+'),
   oo('O-'),
@@ -67,13 +93,23 @@ class _AddusersState extends State<Addusers> {
   bool? isemail = false;
   bool? isalphapulse = false;
   bool? isalpha = false;
+    late List<int> useradded; 
+    late int added; 
+
+  void initusrs() {
+    useradded = [];
+    added=useradded.length;
+  }
   PhoneNumber phoneNumber = PhoneNumber(isoCode: 'DZA '); 
   TextEditingController email = TextEditingController();
   TextEditingController Fullname = TextEditingController();
   TextEditingController Willaya = TextEditingController();
   TextEditingController Password = TextEditingController();
     TextEditingController mldcontroller = TextEditingController();
-  TextEditingController Age = TextEditingController();
+  TextEditingController day = TextEditingController();
+    TextEditingController month = TextEditingController();
+  TextEditingController year = TextEditingController();
+
   TextEditingController Groupage = TextEditingController();
     TextEditingController Gnde = TextEditingController();
     TextEditingController mlre = TextEditingController();
@@ -84,6 +120,7 @@ int v=0;
   late SharedPreferences prefs;
   late String userid;
     late String docname;
+      late String pulseid;
 
   final formKey = GlobalKey<FormState>();
     final formKey1 = GlobalKey<FormState>();
@@ -93,43 +130,17 @@ int v=0;
     Map<String,dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
     userid = jwtDecodedToken['id'];
      docname = jwtDecodedToken['fullname'];
+     pulseid = jwtDecodedToken['idpulse']?? 'null';
+     print(pulseid);
     initShared();
+    initusrs();
+
   }
-    final picker = ImagePicker();
-  File? image;
+  
 
-Future pickimage()async{
-try{
-final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-if(image==null)
-return;
-final imagetomp=File(image.path);
-setState(() {
-this.image=imagetomp;
-});
-}on PlatformException catch(err){
-print(err);
-}
 
-}
 
-  Future uploadImage() async {
-    if (image == null) {
-      print('No image selected.');
-      return;
-    }
 
-    var request = http.MultipartRequest('POST', Uri.parse('https://s4db.onrender.com/12/registerdoctor'));
-    request.files.add(await http.MultipartFile.fromPath('photo', image!.path));
-
-    var response = await request.send();
-
-    if (response.statusCode == 201) {
-      print('Image uploaded successfully.');
-    } else {
-      print('Failed to upload image. Status code: ${response.statusCode}');
-    }
-  }
 
 
   initShared() async {
@@ -138,14 +149,16 @@ print(err);
 
   insertData() async {
 
-    if (email.text.isNotEmpty && Password.text.isNotEmpty && Fullname.text.isNotEmpty && Willaya.text.isNotEmpty) {
+    if (email.text.isNotEmpty && Password.text.isNotEmpty && Fullname.text.isNotEmpty && Willaya.text.isNotEmpty && IdOfpulse.text.isNotEmpty) {
       var regbody = {
         "email": email.text,
         "fullname": Fullname.text,
         "phonenumber": phoneNumber.phoneNumber,
         "willaya": Willaya.text,
         "password": Password.text,
-        "Age": Age.text,
+        "Age": day.text,
+        "month": month.text,
+        "year": year.text,
         "Specialite": isselected.toString(),
         "Grp": grp!.label.toString(),
         "idpulse": IdOfpulse.text,
@@ -156,37 +169,44 @@ print(err);
         "docname":docname
         
       };
+      
       var res = await http.post(Uri.parse("https://s4db.onrender.com/12/registeruser"),
         headers: {"Content-Type":"application/json"},
         body: jsonEncode(regbody)
       );
+     
       var resjson = jsonDecode(res.body);
-      print(res.body);
       if (resjson['status']) {
-       if(DateTime.now().day==true){
-        v=v++;
-       }else{
-        v=0;
-       };
-       RealTimeBarChart(valuek: v,);
-        AwesomeDialog(
+          
+              AwesomeDialog(
+          width: 300,
           context: context,
           dialogType: DialogType.success,
-          animType: AnimType.bottomSlide,
+        animType: AnimType.scale,
           title: 'Success',
-          desc: 'User added successfully!',
+          desc: 'User Added successufully',
           btnOkOnPress: () {},
-        )..show();
+        ).show();
       } else {
         AwesomeDialog(
+          width: 300,
           context: context,
           dialogType: DialogType.error,
-          animType: AnimType.bottomSlide,
+        animType: AnimType.scale,
           title: 'Error',
-          desc: 'Failed to add user!',
+          desc: 'Failed to add user! Maybe you enter a exist Idpulse You must Verify',
           btnOkOnPress: () {},
-        )..show();
+        ).show();
       }
+             AwesomeDialog(
+          width: 300,
+          context: context,
+          dialogType: DialogType.error,
+        animType: AnimType.scale,
+          title: 'Error',
+          desc: 'Failed to add user! Maybe you enter a exist Idpulse You must Verify',
+          btnOkOnPress: () {},
+        ).show();
     }
   }
 
@@ -288,7 +308,7 @@ width: double.maxFinite,
                                           validator: (value){
                                             if(value == null || value.isEmpty){
                                               if(value!.length <= 6){
-                                                return "Please Must be Less than 16 Letters";
+                                                Text( "Please Must be Less than 16 Letters");
                                               }
                                             }
                                           },
@@ -301,32 +321,35 @@ width: double.maxFinite,
                                             });
                                           },
                                           decoration: InputDecoration(
-                                            labelText: "FullName:",
+                                            labelText: "Fullname:",
                                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                                           ),
                                         ),
-                                        SizedBox(height: 10,),
-                                    
-                                        SizedBox(height: 10,),
-                                        TextFormField(
-                                          onChanged: (val){
-                                            setState(() {
-                                              isalphapulse = isAlphanumeric(val);
-                                            });
-                                          },
+                                        SizedBox(height: 20,),
+                                               TextFormField(
                                           validator: (value){
                                             if(value == null || value.isEmpty){
-                                              return "complete the field";
+                                              if(value!.length <= 6){
+                                                return "Please Must be Less than 6 Letters";
+                                              }
                                             }
                                           },
+                                          cursorColor: isemail! ? Colors.green : Colors.red,
                                           obscureText: false,
                                           controller: IdOfpulse,
+                                          onChanged: (val){
+                                            setState(() {
+                                              isemail = isAlpha(val);
+                                            });
+                                          },
                                           decoration: InputDecoration(
-                                            labelText: "Id Of pulse:",
+                                            labelText: "Id pulse:",
                                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                                           ),
                                         ),
+                              
                                         SizedBox(height: 10,),
+                                    
                                         InternationalPhoneNumberInput( 
                                           onInputChanged: (PhoneNumber number) { 
                                             phoneNumber = number; 
@@ -401,7 +424,9 @@ width: double.maxFinite,
                                             border: OutlineInputBorder(borderRadius: BorderRadius.circular(4)),
                                           ),
                                         ),
-                                        SizedBox(height: 10,),
+                                        SizedBox(height: 15,),
+                                                                                    Text("Date Of birth"),
+
                                         Row(
                                           children: [
                                             Container(
@@ -413,59 +438,102 @@ width: double.maxFinite,
                                                   }
                                                 },
                                                 obscureText: false,
-                                                controller: Age,
+                                                controller: day,
                                                 decoration: InputDecoration(
-                                                  labelText: "Age:",
+                                                  labelText: "day:",
                                                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
                                                 ),
                                               ),
                                             ),
+                                            SizedBox(width: 15,),
+                                                   Container(
+                                              width: 100,
+                                              child: TextFormField(
+                                                validator: (value){
+                                                  if(value == null || value.isEmpty){
+                                                    return "complete the field";
+                                                  }
+                                                },
+                                                obscureText: false,
+                                                controller: month,
+                                                decoration: InputDecoration(
+                                                  labelText: "month:",
+                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(width: 15,),
+                                               Container(
+                                              width: 100,
+                                              child: TextFormField(
+                                                validator: (value){
+                                                  if(value == null || value.isEmpty){
+                                                    return "complete the field";
+                                                  }
+                                                },
+                                                obscureText: false,
+                                                controller: year,
+                                                decoration: InputDecoration(
+                                                  labelText: "Year:",
+                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(5)),
+                                                ),
+                                              ),
+                                            ),
+                                            
                                                     SizedBox(width: 20,),
-                                        DropdownMenu<GrpLabel>(
-                                          initialSelection: GrpLabel.O,
-                                          controller: Groupage,
-                                          requestFocusOnTap: true,
-                                          label: const Text("Groupage"),
-                                          onSelected: (GrpLabel? grp1){
-                                            setState(() {
-                                              grp = grp1;
-                                            });
-                                          },
-                                          width: 100,
-                                          dropdownMenuEntries: GrpLabel.values.map<DropdownMenuEntry<GrpLabel>>(
-                                            (GrpLabel e){
-                                              return DropdownMenuEntry<GrpLabel>(value: e,label: e.label, enabled: e.label != '',
-                                                style: MenuItemButton.styleFrom(
-                                                  foregroundColor: Color.fromRGBO(255, 255, 255, 1),
-                                                ),
-                                              );
-                                            }
-                                          ).toList(),
-                                        ),
-                                        SizedBox(width: 20,),
-                                                 DropdownMenu<Gender>(
-                                          initialSelection: Gender.male,
-                                          controller: Gnde,
-                                          requestFocusOnTap: true,
-                                          label: const Text("Gender"),
-                                          onSelected: (Gender? gnd1){
-                                            setState(() {
-                                              gndr = gnd1;
-                                            });
-                                          },
-                                          width: 110,
-                                          dropdownMenuEntries: Gender.values.map<DropdownMenuEntry<Gender>>(
-                                            (Gender e){
-                                              return DropdownMenuEntry<Gender>(value: e,label: e.label, enabled: e.label != '',
-                                                style: MenuItemButton.styleFrom(
-                                                  foregroundColor: Color.fromRGBO(0, 0, 0, 1),
-                                                ),
-                                              );
-                                            }
-                                          ).toList(),
-                                        ),
+                              
                                         
                                           ],
+                                        ),
+                                        SizedBox(height: 20,),
+                                        Center(
+                                          child: Row(
+                                            children: [
+                                                             DropdownMenu<GrpLabel>(
+                                            initialSelection: GrpLabel.O,
+                                            controller: Groupage,
+                                            requestFocusOnTap: true,
+                                            label: const Text("Groupage"),
+                                            onSelected: (GrpLabel? grp1){
+                                              setState(() {
+                                                grp = grp1;
+                                              });
+                                            },
+                                            width: 100,
+                                            dropdownMenuEntries: GrpLabel.values.map<DropdownMenuEntry<GrpLabel>>(
+                                              (GrpLabel e){
+                                                return DropdownMenuEntry<GrpLabel>(value: e,label: e.label, enabled: e.label != '',
+                                                  style: MenuItemButton.styleFrom(
+                                                    foregroundColor: Color.fromRGBO(255, 255, 255, 1),
+                                                  ),
+                                                );
+                                              }
+                                            ).toList(),
+                                          ),
+                                          SizedBox(width: 20,),
+                                                   DropdownMenu<Gender>(
+                                            initialSelection: Gender.male,
+                                            controller: Gnde,
+                                            requestFocusOnTap: true,
+                                            label: const Text("Gender"),
+                                            onSelected: (Gender? gnd1){
+                                              setState(() {
+                                                gndr = gnd1;
+                                              });
+                                            },
+                                            width: 110,
+                                            dropdownMenuEntries: Gender.values.map<DropdownMenuEntry<Gender>>(
+                                              (Gender e){
+                                                return DropdownMenuEntry<Gender>(value: e,label: e.label, enabled: e.label != '',
+                                                  style: MenuItemButton.styleFrom(
+                                                    foregroundColor: Color.fromRGBO(0, 0, 0, 1),
+                                                  ),
+                                                );
+                                              }
+                                            ).toList(),
+                                          ),
+                                            ],
+                                          ),
                                         ),
                                         SizedBox(height: 20,),
                                              Text("Have You Heart Problems ?", style: TextStyle(fontSize: 15,color: Colors.black)),
@@ -483,7 +551,7 @@ width: double.maxFinite,
                                           initialSelection: Maladie.ml1,
                                           controller: mlre,
                                           requestFocusOnTap: true,
-                                          label: const Text("Mladies"),
+                                          label: const Text("Maladies"),
                                           onSelected: (Maladie? mld){
                                             setState(() {
                                               mlde = mld;
@@ -514,35 +582,22 @@ width: double.maxFinite,
                             children: [
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(200, 40),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(5),
                                   ),
                                   backgroundColor: Colors.redAccent,
                                 ),
                                 onPressed: (){
-                                  insertData();
+                                   
+      
+                                 insertData();
+                                   
+                                             Provider.of<UserCountModel>(context, listen: false).addUser();
+
                                 }, 
                                 child: const Text("Add Patient Now",style: TextStyle(color: Colors.white,))
                               ),
-                              SizedBox(height: 200,),
-                              Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            image == null
-               ? Text('No image selected.')
-                : Image.file(image!),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: pickimage,
-              child: Text('Select Image'),
-            ),
-            ElevatedButton(
-              onPressed: uploadImage,
-              child: Text('Upload Image'),
-            ),
-          ],
-        ),
+      
                             ],
                           ),
                         ],

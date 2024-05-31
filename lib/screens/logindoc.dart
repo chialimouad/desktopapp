@@ -188,11 +188,7 @@ bool validateInputs() {
               child: Container(
                 width: 400,
                 height: 500,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
-                  boxShadow: [BoxShadow(blurRadius: 1)],
-                ),
+          
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -243,26 +239,33 @@ bool validateInputs() {
                             ),
                           ),
                           const SizedBox(height: 50),
-                          ElevatedButton(
-                            onPressed: () {
-                              if (key.currentState?.validate() ?? false) {
-                                loginuser();
-                              }
-                            },
-                            child: isactive
-                                ? SizedBox(
-                                    width: 120,
-                                    height: 80,
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                                        SizedBox(width: 10),
-                                        Text("Submitting", style: TextStyle(color: Colors.white)),
-                                      ],
-                                    ),
-                                  )
-                                : Text("Login Dr", style: TextStyle(color: Colors.white)),
+                          Container(
+                            width:300,
+                            height: 50,
+                            decoration: BoxDecoration(color: Color.fromRGBO(0, 52, 102, 1)),
+                            child: ElevatedButton(
+ style: ButtonStyle(
+    backgroundColor: MaterialStateProperty.all<Color>(Color.fromRGBO(0, 52, 102, 1)),
+  ),                              onPressed: () {
+                                if (key.currentState?.validate() ?? false) {
+                                  loginuser();
+                                }
+                              },
+                              child: isactive
+                                  ? SizedBox(
+                                      width: 120,
+                                      height: 80,
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                                          SizedBox(width: 10),
+                                          Text("Submitting", style: TextStyle(color: Colors.white)),
+                                        ],
+                                      ),
+                                    )
+                                  : Text("Login Dr", style: TextStyle(color: Colors.white)),
+                            ),
                           ),
                           const SizedBox(height: 20),
                           const Text("Optimal Health and Well-being"),

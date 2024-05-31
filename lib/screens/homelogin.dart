@@ -6,7 +6,7 @@ import 'package:deskapp/barchat/bannerdash.dart';
 import 'package:deskapp/bargraph/linechart.dart';
 import 'package:deskapp/bargraph/mybargraph.dart';
 import 'package:deskapp/bargraph/piechart.dart';
-import 'package:deskapp/screens/test.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
@@ -31,7 +31,9 @@ Map<String, dynamic> jwtDecodedToken = JwtDecoder.decode(widget.token);
 userid = jwtDecodedToken['id'];
 getUser(userid);
 }
-
+   age(int year){
+    return DateTime.now().year-year;
+  }
 void getUser(userid) async {
 try {
   var regbody = {
@@ -131,9 +133,9 @@ height: 200,
 decoration: BoxDecoration(
 color: Color.fromRGBO(255, 255, 255, 1),
 boxShadow: [BoxShadow(blurRadius: 0.1)],
-borderRadius: BorderRadius.circular(15),
+borderRadius: BorderRadius.circular(5),
 ),
-child: RealTimeBarChart(),
+child: UserCountPage(),
 ),
 SizedBox(width: 100),
 Container(
@@ -214,7 +216,7 @@ child: Row(
 mainAxisAlignment: MainAxisAlignment.spaceBetween,
 children: [
 Text('${items![index]['fullname']}'),
-Text('${items![index]['Age']}'),
+Text('${age(items![index]['year'])}'),
 Text('${items![index]['willaya']}'),
 CircleAvatar(radius: 5, backgroundColor: Colors.green),
 

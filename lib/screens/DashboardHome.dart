@@ -8,7 +8,6 @@ import 'package:deskapp/screens/homelogin.dart';
 import 'package:deskapp/screens/infos.dart';
 import 'package:deskapp/screens/logindoc.dart';
 import 'package:deskapp/screens/settings.dart';
-import 'package:deskapp/screens/test.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +18,25 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// class PatientData {
+//   final String sensor;
+//   final int value;
+//   final DateTime timestamp;
 
+//   PatientData({
+//     required this.sensor,
+//     required this.value,
+//     required this.timestamp,
+//   });
+
+//   factory PatientData.fromJson(Map<String, dynamic> json) {
+//     return PatientData(
+//       sensor: json['sensor'] ?? '',
+//       value: json['value'] ?? 0,
+//       timestamp: DateTime.tryParse(json['timestamp'] ?? '') ?? DateTime.now(),
+//     );
+//   }
+// }
 class Dashboar extends StatefulWidget {
   final token;
    Dashboar({required this.token,super.key, });
@@ -33,7 +50,7 @@ class _DashboarState extends State<Dashboar> {
       final formKey = GlobalKey<FormState>();
 
       late String name;
-    late int age;
+    late int age=0;
     late String street;
     File?image;
   @override
@@ -41,13 +58,15 @@ class _DashboarState extends State<Dashboar> {
     // TODO: implement initState
     super.initState();
    Map<String,dynamic> jwtDecodedToken =JwtDecoder.decode(widget.token);
-    age=jwtDecodedToken['Age'];
+    age!=jwtDecodedToken['year'];
     name=jwtDecodedToken['fullname'];
     street=jwtDecodedToken['willaya'];
         image=jwtDecodedToken['data'];
 
   }
-
+   ages(int year){
+    return DateTime.now().year-year;
+  }
 @override
   void setState(VoidCallback fn)async {
     // TODO: implement setState
@@ -65,12 +84,10 @@ class _DashboarState extends State<Dashboar> {
   Widget build(BuildContext context) {
      bool isDark = false;
 
-       final ThemeData themeData = ThemeData(
-        useMaterial3: true,
-        brightness: isDark ? Brightness.dark : Brightness.light);
+       
       final List<Widget> screens =[
      HomeLogin(token: widget.token,),
-     Allpatient(token: widget.token,),
+     Allpatient(token: widget.token, patient: null,),
      Addusers(token: widget.token,),
      History(),
      Infos(token: widget.token,),
@@ -209,7 +226,7 @@ class _DashboarState extends State<Dashboar> {
             ),
           
           ),
-           Text("${age}",style: TextStyle(
+           Text("${ages(age)}",style: TextStyle(
           decoration: TextDecoration.none,
           color: Colors.black,
           fontSize: 14,
